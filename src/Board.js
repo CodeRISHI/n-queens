@@ -137,6 +137,19 @@
     //
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
+      var counter = majorDiagonalColumnIndexAtFirstRow;
+      var sum = this.rows().reduce(function(a, b) {
+        if (counter < this.rows().length && counter > -1) {
+          var temp = a + b[counter];
+          counter++;
+          return temp;
+        }
+        counter++;
+        return a;
+      }, 0);
+      if (sum > 1) {
+        return true;
+      }
       return false; // fixme
     },
 

@@ -110,7 +110,13 @@
     //
     // test if a specific column on this board contains a conflict
     hasColConflictAt: function(colIndex) {
-      return false; // fixme
+      var sum = this.rows().reduce(function(a, b) {
+        return a + b[colIndex];
+      }, 0);
+      if (sum > 1) {
+        return true;
+      }
+      return false;
     },
 
     // test if any columns on this board contain conflicts

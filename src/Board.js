@@ -121,7 +121,13 @@
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
-      return false; // fixme
+      var conflict = false;
+      _.each(this.rows(), function(el, ind) {
+        if (this.hasColConflictAt(ind)) {
+          conflict = true;
+        }
+      }.bind(this));
+      return conflict;
     },
 
 

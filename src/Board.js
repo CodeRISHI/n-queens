@@ -94,7 +94,13 @@
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
-      return false; // fixme
+      var conflict = false;
+      this.rows().forEach(function(e, i) {
+        if (this.hasRowConflictAt(i)) {
+          conflict = true;
+        }
+      }.bind(this));
+      return conflict;
     },
 
 

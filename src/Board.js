@@ -150,7 +150,7 @@
       if (sum > 1) {
         return true;
       }
-      return false; // fixme
+      return false;
     },
 
     // test if any major diagonals on this board contain conflicts
@@ -171,7 +171,20 @@
     //
     // test if a specific minor diagonal on this board contains a conflict
     hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+      var counter = majorDiagonalColumnIndexAtFirstRow;
+      var sum = this.rows().reduce(function(a, b) {
+        if (counter < this.rows().length) {
+          var temp = a + b[counter];
+          counter--;
+          return temp;
+        }
+        counter--;
+        return a;
+      }.bind(this), 0);
+      if (sum > 1) {
+        return true;
+      }
+      return false;
     },
 
     // test if any minor diagonals on this board contain conflicts

@@ -146,7 +146,7 @@
         }
         counter++;
         return a;
-      }, 0);
+      }.bind(this), 0);
       if (sum > 1) {
         return true;
       }
@@ -155,7 +155,13 @@
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
-      return false; // fixme
+      var conflict = false;
+      for ( var i = -(this.rows().length - 2); i < this.rows().length - 1; i++) {
+        if (this.hasMajorDiagonalConflictAt(i)) {
+          conflict = true;
+        }
+      }
+      return conflict;
     },
 
 

@@ -112,8 +112,50 @@ window.findNQueensSolution = function(n) {
 
 // return the number of nxn chessboards that exist, with n queens placed such that none of them can attack each other
 window.countNQueensSolutions = function(n) {
-  var solutionCount = undefined; //fixme
+  var solutionCount = 0; //fixme
+  var board = new Board({n: n});
+ 
+  // create a counter, numOfQueens, to keep track of the number of Queens on the board
+  var numOfQueens = 0;
+  // create a private function called _decisionTree
+  var _decisionTree = function(x, y) {
+    // base case
+    // if there is a conflict
+    if (board.hasAnyQueensConflicts()) {
+      // return out of this case
+      return;
+    }
 
+    // if numOfQueens equals n
+    if (numOfQueens === n) {
+      // increment the counter variable
+      solutionCount++;
+      // return out of this case
+      return;
+    }
+    // for every row in board.rows() 
+    for (var i = x; i < board.rows().length; i++) {
+      // if i increments up, j should start at zero and not y
+      if (i > x) {
+        y = 0;
+      }
+      // for every element in that row
+      for (var j = y; j < board.rows(i).length; j++) {
+        debugger;
+        // place Rook at that element
+        board.togglePiece(i, j);
+        // increment numOQueensf
+        numOfQueens++;
+        // call _decisionTree
+        _decisionTree(i, j + 1);
+        // remove Rook at that element
+        board.togglePiece(i, j);
+        // decrement numOQueensf
+        numOfQueens--;
+      }
+    }
+  };
+  _decisionTree(0, 0);
   console.log('Number of solutions for ' + n + ' queens:', solutionCount);
   return solutionCount;
 };

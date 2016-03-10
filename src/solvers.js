@@ -23,7 +23,7 @@ window.findNRooksSolution = function(n) {
   var _toggle = function(x, y) {
     var x = x;
     var y = y;
-    
+
     if (counter === n) {
       return;
     }
@@ -53,8 +53,43 @@ window.findNRooksSolution = function(n) {
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n) {
-  var solutionCount = undefined;
+  var solutionCount = 0;
+  var board = new Board({n: n});
+ 
+  // create a counter, numOfRooks, to keep track of the number of Rooks on the board
+  var numOfRooks = 0;
+  // create a private function called _decisionTree
+  var _decisionTree = function(x, y) {
+    // base case
+    // if there is a conflict
+    if (board.hasAnyRooksConflicts()) {
+      // return out of this case
+      return;
+    }
 
+    // if numOfRooks equals n
+    if (numOfRooks === n) {
+      // increment the counter variable
+      solutionCount++;
+      // return out of this case
+      return;
+    }
+    // for every row in board.rows() 
+    for (var i = x; i < board.rows().length; i++) {
+      // for every element in that row
+      for (var j = y; j < i.length; j++) {
+        // place Rook at that element
+        board.togglePiece(i, j);
+        // call _decisionTree
+        _decisionTree(i , j + 1);
+        // remove Rook at that element
+        board.togglePiece(i, j);
+      }
+    }
+  };
+
+  // call _decisionTree
+  _decisionTree(0, 0);
   console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
   return solutionCount;
 };

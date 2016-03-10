@@ -65,12 +65,6 @@ window.countNRooksSolutions = function(n) {
   // create a private function called _decisionTree
   var _decisionTree = function(x, y) {
     // base case
-    // if there is a conflict
-    if (board.hasAnyRooksConflicts()) {
-      // return out of this case
-      return;
-    }
-
     // if numOfRooks equals n
     if (numOfRooks === n) {
       // increment the counter variable
@@ -86,6 +80,9 @@ window.countNRooksSolutions = function(n) {
       }
       // for every element in that row
       for (var j = y; j < board.rows(i).length; j++) {
+        if (numOfRooks === 0 && i > 0) {
+          return;  
+        }
         if (iArr.indexOf(i) === -1 && jArr.indexOf(j) === -1) {
           // place Rook at that element
           board.togglePiece(i, j);
@@ -119,8 +116,14 @@ window.countNRooksSolutions = function(n) {
 window.findNQueensSolution = function(n) {
   var solution = undefined;
   var board = new Board({n: n});
+
+  //arrays to store indices to block off rows/columns
+  var iArr = [];
+  var jArr = [];
+
   // create a counter, numOfQueens, to keep track of the number of Queens on the board
   var numOfQueens = 0;
+
   // create a private function called _decisionTree
   var _decisionTree = function(x, y) {
     // base case
@@ -145,21 +148,29 @@ window.findNQueensSolution = function(n) {
       }
       // for every element in that row
       for (var j = y; j < board.rows(i).length; j++) {
-        // debugger;
-        // place Rook at that element
-        board.togglePiece(i, j);
-        // increment numOQueensf
-        numOfQueens++;
-        // call _decisionTree
-        _decisionTree(i, j + 1);
+        if (iArr.indexOf(i) === -1 && jArr.indexOf(j) === -1) {
+          // debugger;
+          // place Rook at that element
+          board.togglePiece(i, j);
+          // add indices
+          iArr.push(i);
+          jArr.push(j);
+          // increment numOQueensf
+          numOfQueens++;
+          // call _decisionTree
+          _decisionTree(i, j + 1);
 
-        if (solution) {
-          return;
+          if (solution) {
+            return;
+          }
+          // remove Rook at that element
+          board.togglePiece(i, j);
+          // remove indices
+          iArr.pop(i);
+          jArr.pop(j);
+          // decrement numOQueensf
+          numOfQueens--;
         }
-        // remove Rook at that element
-        board.togglePiece(i, j);
-        // decrement numOQueensf
-        numOfQueens--;
       }
     }
   };
@@ -177,6 +188,10 @@ window.findNQueensSolution = function(n) {
 window.countNQueensSolutions = function(n) {
   var solutionCount = 0;
   var board = new Board({n: n});
+
+  //arrays to store indices to block off rows/columns
+  var iArr = [];
+  var jArr = [];
  
   // create a counter, numOfQueens, to keep track of the number of Queens on the board
   var numOfQueens = 0;
@@ -204,16 +219,27 @@ window.countNQueensSolutions = function(n) {
       }
       // for every element in that row
       for (var j = y; j < board.rows(i).length; j++) {
-        // place Rook at that element
-        board.togglePiece(i, j);
-        // increment numOQueensf
-        numOfQueens++;
-        // call _decisionTree
-        _decisionTree(i, j + 1);
-        // remove Rook at that element
-        board.togglePiece(i, j);
-        // decrement numOQueensf
-        numOfQueens--;
+        if (numOfQueens === 0 && i > 0) {
+          return;  
+        }
+        if (iArr.indexOf(i) === -1 && jArr.indexOf(j) === -1) {
+          // place Rook at that element
+          board.togglePiece(i, j);
+          // add indices
+          iArr.push(i);
+          jArr.push(j);
+          // increment numOQueensf
+          numOfQueens++;
+          // call _decisionTree
+          _decisionTree(i, j + 1);
+          // remove Rook at that element
+          board.togglePiece(i, j);
+          // remove indices
+          iArr.pop(i);
+          jArr.pop(j);
+          // decrement numOQueensf
+          numOfQueens--;
+        }
       }
     }
   };

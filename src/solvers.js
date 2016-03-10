@@ -55,6 +55,10 @@ window.findNRooksSolution = function(n) {
 window.countNRooksSolutions = function(n) {
   var solutionCount = 0;
   var board = new Board({n: n});
+
+  //arrays to store indices to block off rows/columns
+  var iArr = [];
+  var jArr = [];
  
   // create a counter, numOfRooks, to keep track of the number of Rooks on the board
   var numOfRooks = 0;
@@ -82,16 +86,24 @@ window.countNRooksSolutions = function(n) {
       }
       // for every element in that row
       for (var j = y; j < board.rows(i).length; j++) {
-        // place Rook at that element
-        board.togglePiece(i, j);
-        // increment numOfRooks
-        numOfRooks++;
-        // call _decisionTree
-        _decisionTree(i, j + 1);
-        // remove Rook at that element
-        board.togglePiece(i, j);
-        // decrement numOfRooks
-        numOfRooks--;
+        if (iArr.indexOf(i) === -1 && jArr.indexOf(j) === -1) {
+          // place Rook at that element
+          board.togglePiece(i, j);
+          // add indices
+          iArr.push(i);
+          jArr.push(j);
+          // increment numOfRooks
+          numOfRooks++;
+          // call _decisionTree
+          _decisionTree(i, j + 1);
+          // remove Rook at that element
+          board.togglePiece(i, j);
+          // pop the indices
+          iArr.pop();
+          jArr.pop();
+          // decrement numOfRooks
+          numOfRooks--;
+        }
       }
     }
   };

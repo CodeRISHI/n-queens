@@ -76,14 +76,22 @@ window.countNRooksSolutions = function(n) {
     }
     // for every row in board.rows() 
     for (var i = x; i < board.rows().length; i++) {
+      // if i increments up, j should start at zero and not y
+      if (i > x) {
+        y = 0;
+      }
       // for every element in that row
-      for (var j = y; j < i.length; j++) {
+      for (var j = y; j < board.rows(i).length; j++) {
         // place Rook at that element
         board.togglePiece(i, j);
+        // increment numOfRooks
+        numOfRooks++;
         // call _decisionTree
-        _decisionTree(i , j + 1);
+        _decisionTree(i, j + 1);
         // remove Rook at that element
         board.togglePiece(i, j);
+        // decrement numOfRooks
+        numOfRooks--;
       }
     }
   };
